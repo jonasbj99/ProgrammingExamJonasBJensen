@@ -7,26 +7,34 @@ public class GenerateCouse : MonoBehaviour
 {
     [SerializeField] GameObject parentObject;
     [SerializeField] GameObject coursePanel;
-    [SerializeField] string courseTitle;
-    [SerializeField] string courseDate;
-    Text titleText;
-    Text dateText;
-    string titleName = "TitleText";
-    string dateName = "DateText";
+    public string courseTitle;
+    public string courseDate;
     Vector2 downScale = new Vector2(1f, 1f);
 
+    Transform parentTransform;
+    RectTransform parentAdjust;
+    float baseWidth = -100f;
+    float startHeight = 1497.6f;
+    float panelSize = 475f;
+    float padding = 25f;
+
+    // Method run on click of button, instantiating coursePanel prefab, giving the instantiated object a parent, and scaling the instantiated object.
     public void NewCourse()
     {
         GameObject newCoursePanel = Instantiate(coursePanel);
         newCoursePanel.transform.parent = parentObject.transform;
         newCoursePanel.transform.localScale = downScale;
-        FindText(titleText, titleName, courseTitle);
-        FindText(dateText, dateName, courseDate);
     }
 
-    void FindText( Text courseText, string textName, string courseString)
+    void Update()
     {
-        courseText = GameObject.Find(textName).GetComponent<Text>();
-        courseText.text = courseString;
+        parentTransform = this.transform;
+        parentAdjust = parentObject.GetComponent<RectTransform>();
+        parentAdjust.sizeDelta = new Vector2(baseWidth, startHeight);
+
+        if(parentTransform.childCount > 3)
+        {
+            parentAdjust.sizeDelta = new Vector2(baseWidth, padding+(panelSize * parentTransform.childCount));
+        }
     }
 }
